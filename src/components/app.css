@@ -1,0 +1,12 @@
+.todos{
+position: absolute;
+right: 0px;
+width: 80%;
+padding: 10px;
+}
+.menu{
+position: absolute;
+right: 0px;
+width: 20%;
+padding: 10px;	
+}
