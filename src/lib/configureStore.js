@@ -9,6 +9,12 @@ import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux'
 export const history = createHistory();
 
+//middleware de redux, para despachar los actions e inyecta el isomorphic
+const injectMiddleware = deps => ({ dispatch, getState }) => next => action =>
+  next(typeof action === 'function'
+    ? action({ ...deps, dispatch, getState })
+    : action
+  );
 
 export default function configureStore(options, rootReducer) {
   const { initialState = {} } = options;
@@ -16,6 +22,13 @@ export default function configureStore(options, rootReducer) {
 
   const middleware = [
 
+  	injectMiddleware({
+      fetch: isomorphicFetch
+    }),
+    //ayuda a manejas las promises agregadole sufijos
+    promiseMiddleware({
+      promiseTypeSuffixes: ['START', 'SUCCESS', 'ERROR']
+    }),
     reduxImmutableStateInvariant(),
     
     createLogger(),
